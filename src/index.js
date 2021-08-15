@@ -14,11 +14,17 @@ const app = express();
 app.use(cors());
 app.use(morgan('dev'));
 app.use(helmet());
+app.use(express.json());
 
 app.use('/product', product);
 
 
-const port = process.env.PORT || 3000;
+const { errorHandling, notFound } = require('./utils/middleware');
+app.use('*', notFound);
+app.use(errorHandling);
+
+
+const port = process.env.PORT || 3100;
 app.listen(port, () => {
     console.log(`Express App Listening on port ${port}`);
 })
