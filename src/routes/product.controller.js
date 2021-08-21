@@ -6,8 +6,15 @@ function getAll(req, res, next) {
 
 }
 
-function get(req, res, next) {
-
+async function get(req, res, next) {
+    const { uuid } = req.params;
+    const product = await database.get('product').getOne({
+        UUID: uuid,
+    });
+    if (!product) {
+        next(new Error('Product not found'));
+    }
+    res.json(product);
 }
 
 function create(req, res, next) {
@@ -15,7 +22,7 @@ function create(req, res, next) {
     if (validation.success) {
         database.get('product').create(req.body);
     } else {
-        throw new Error(validation.message);
+        next(new Error(validation.message));
     }
 }
 
