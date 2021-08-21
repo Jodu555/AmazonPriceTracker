@@ -2,8 +2,13 @@ const { Database } = require('@jodu555/mysqlapi');
 const database = Database.getDatabase();
 const validator = require('../utils/validator');
 
-function getAll(req, res, next) {
-
+async function getAll(req, res, next) {
+    const products = await database.get('product').get({});
+    console.log(products, products.length);
+    if (products.length == 0) {
+        next(new Error('There are no Products!'));
+    }
+    res.json(products);
 }
 
 async function get(req, res, next) {
