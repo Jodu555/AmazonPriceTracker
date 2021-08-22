@@ -1,6 +1,7 @@
 const { Database } = require('@jodu555/mysqlapi');
 const database = Database.getDatabase();
 const validator = require('../utils/validator');
+const { getAmazonData } = require('../utils/amazon');
 
 async function getAll(req, res, next) {
     const products = await database.get('product').get({});
@@ -48,9 +49,22 @@ async function update(req, res, next) {
     }
 }
 
+async function fetchAll(req, res, next) {
+    try {
+        const products = await database.get('product').get({});
+        products.forEach((product) => {
+            getAmazonData(product.amazon_link);
+        });
+        res.json(products);
+    } catch (error) {
+        next(error);
+    }
+}
+
 module.exports = {
     getAll,
     get,
     create,
-    update
+    update,
+    fetchAll
 };

@@ -7,7 +7,6 @@ const database = Database.createDatabase('localhost', 'root', '', 'amazonPriceTr
 database.connect();
 require('./utils/tables').createTables();
 
-const { getAmazonData } = require('./utils/amazon');
 const { router: product } = require('./routes/produt')
 
 const app = express();

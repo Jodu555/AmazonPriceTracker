@@ -8,7 +8,7 @@ function createTables() {
             PK: 'UUID',
         },
         UUID: 'varchar(64)',
-        amazon_link: 'varchar(64)',
+        amazon_link: 'MEDIUMTEXT',
         product_data_UUID: 'varchar(64)',
     });
 
