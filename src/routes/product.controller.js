@@ -57,7 +57,7 @@ async function update(req, res, next) {
 async function fetchAll(req, res, next) {
     try {
         const products = await database.get('product').get({});
-        products.forEach((product) => {
+        products.forEach(async (product) => {
             const data = await getAmazonData(product.amazon_link);
             insertData(product.UUID, data);
         });
