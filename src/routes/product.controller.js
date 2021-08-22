@@ -53,9 +53,24 @@ async function fetchAll(req, res, next) {
     try {
         const products = await database.get('product').get({});
         products.forEach((product) => {
-            getAmazonData(product.amazon_link);
+            const data = getAmazonData(product.amazon_link);
+            //TODO: Insert the data to the databbase
         });
         res.json(products);
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function fetchOne(req, res, next) {
+    const { uuid } = req.params;
+    try {
+        const product = await database.get('product').getOne({
+            UUID: uuid
+        });
+        const data = getAmazonData(product.amazon_link);
+        //TODO: Insert the data to the databbase
+        res.json(product);
     } catch (error) {
         next(error);
     }
@@ -66,5 +81,6 @@ module.exports = {
     get,
     create,
     update,
-    fetchAll
+    fetchAll,
+    fetchOne
 };
