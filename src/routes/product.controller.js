@@ -81,8 +81,16 @@ async function fetchOne(req, res, next) {
     }
 }
 
-function insertData(UUID, data) {
-
+async function insertData(UUID, data) {
+    data.rating = JSON.stringify(data.rating);
+    data.descriptions = JSON.stringify(data.descriptions);
+    data.specifications = JSON.stringify(data.specifications);
+    const obj = {
+        UUID,
+        time: Date.now(),
+        ...data
+    }
+    database.get('product_data').create(obj);
 }
 
 module.exports = {

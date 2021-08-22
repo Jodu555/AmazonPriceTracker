@@ -23,10 +23,10 @@ async function getAmazonData(URL) {
         max: rating.split(' von ')[1],
     };
 
-    const $descirption = cheerio.load($('div#feature-bullets').html());
-    const descirptions = [];
-    $descirption('span.a-list-item').each((index, item) => {
-        descirptions.push($descirption(item).text().trim());
+    const $description = cheerio.load($('div#feature-bullets').html());
+    const descriptions = [];
+    $description('span.a-list-item').each((index, item) => {
+        descriptions.push($description(item).text().trim());
     });
 
     const specifications = [];
@@ -48,7 +48,7 @@ async function getAmazonData(URL) {
         title,
         price,
         rating,
-        descirptions,
+        descriptions,
         specifications,
         availability,
         delivery
