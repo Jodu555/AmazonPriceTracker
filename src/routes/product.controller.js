@@ -4,7 +4,6 @@ const validator = require('../utils/validator');
 
 async function getAll(req, res, next) {
     const products = await database.get('product').get({});
-    console.log(products, products.length);
     if (products.length == 0) {
         next(new Error('There are no Products!'));
     }
@@ -31,8 +30,22 @@ function create(req, res, next) {
     }
 }
 
-function update(req, res, next) {
-
+async function update(req, res, next) {
+    const { uuid } = req.params;
+    try {
+        const validation = validator.validateProduct(req.body);
+        if (validation.success) {
+            if (validation.UUID) delete validation.UUID;
+            const update = await database.get('product').update({
+                UUID: uuid
+            }, req.body);
+            res.json(update);
+        } else {
+            throw new Error(validation.message);
+        }
+    } catch (error) {
+        next(error);
+    }
 }
 
 module.exports = {
