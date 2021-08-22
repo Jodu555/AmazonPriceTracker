@@ -21,7 +21,11 @@ function errorHandling(err, req, res, next) {
                 error,
             });
         }
-
+    } else {
+        res.status(500).send({
+            success: false,
+            message: error.message,
+        })
     }
 }
 
