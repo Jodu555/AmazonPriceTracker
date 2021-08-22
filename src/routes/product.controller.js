@@ -58,7 +58,7 @@ async function fetchAll(req, res, next) {
     try {
         const products = await database.get('product').get({});
         products.forEach((product) => {
-            const data = getAmazonData(product.amazon_link);
+            const data = await getAmazonData(product.amazon_link);
             insertData(product.UUID, data);
         });
         res.json(products);
@@ -73,7 +73,7 @@ async function fetchOne(req, res, next) {
         const product = await database.get('product').getOne({
             UUID: uuid
         });
-        const data = getAmazonData(product.amazon_link);
+        const data = await getAmazonData(product.amazon_link);
         insertData(uuid, data);
         res.json(product);
     } catch (error) {
