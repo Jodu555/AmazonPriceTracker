@@ -59,7 +59,7 @@ async function fetchAll(req, res, next) {
         const products = await database.get('product').get({});
         products.forEach((product) => {
             const data = getAmazonData(product.amazon_link);
-            //TODO: Insert the data to the databbase
+            insertData(product.UUID, data);
         });
         res.json(products);
     } catch (error) {
@@ -74,11 +74,15 @@ async function fetchOne(req, res, next) {
             UUID: uuid
         });
         const data = getAmazonData(product.amazon_link);
-        //TODO: Insert the data to the databbase
+        insertData(uuid, data);
         res.json(product);
     } catch (error) {
         next(error);
     }
+}
+
+function insertData(UUID, data) {
+
 }
 
 module.exports = {
