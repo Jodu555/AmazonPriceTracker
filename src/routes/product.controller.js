@@ -2,6 +2,7 @@ const { Database } = require('@jodu555/mysqlapi');
 const database = Database.getDatabase();
 const validator = require('../utils/validator');
 const { getAmazonData } = require('../utils/amazon');
+const { v4: uuidv4 } = require('uuid');
 
 async function getAll(req, res, next) {
     const products = await database.get('product').get({});
@@ -25,7 +26,11 @@ async function get(req, res, next) {
 function create(req, res, next) {
     const validation = validator.validateProduct(req.body);
     if (validation.success) {
-        database.get('product').create(req.body);
+        const product = req.body;
+        product.UUID = v4();
+        product.product_data_UUID = v4();
+        database.get('product').create(product);
+        res.json(product);
     } else {
         next(new Error(validation.message));
     }
