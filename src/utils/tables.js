@@ -14,7 +14,7 @@ function createTables() {
 
     database.createTable('product_data', {
         options: {
-            PK: 'UUID',
+            K: ['UUID'],
             FK: {
                 'UUID': 'product/UUID',
             },
