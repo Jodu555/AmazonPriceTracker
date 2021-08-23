@@ -35,14 +35,11 @@ async function getAmazonData(URL) {
             if (i % 2 == 0) {
                 specifications.push($(child).text().trim().replace(/\s/g, ' '));
             }
-
         });
     });
 
     const availability = $('div#availability span').text().trim()
     const delivery = $('div#mir-layout-DELIVERY_BLOCK-slot-DELIVERY_MESSAGE b').text().trim();
-
-    // console.log(title, price, rating, infos, specifications);
 
     const data = {
         title,
@@ -53,8 +50,6 @@ async function getAmazonData(URL) {
         availability,
         delivery
     }
-    console.log(data);
-    console.log(new Date().toLocaleString('de'));
     return data;
 }
 
