@@ -8,6 +8,8 @@ database.connect();
 require('./utils/tables').createTables();
 
 const { router: product } = require('./routes/produt')
+const { router: fetch } = require('./routes/fetch')
+
 
 const app = express();
 app.use(cors());
@@ -16,6 +18,7 @@ app.use(helmet());
 app.use(express.json());
 
 app.use('/product', product);
+app.use('/fetch', fetch);
 
 
 const { errorHandling, notFound } = require('./utils/middleware');
