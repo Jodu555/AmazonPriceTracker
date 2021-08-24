@@ -1,5 +1,3 @@
-const fs = require('fs');
-const path = require('path');
 const fetch = require('node-fetch');
 const cheerio = require('cheerio');
 const HttpsProxyAgent = require('https-proxy-agent');

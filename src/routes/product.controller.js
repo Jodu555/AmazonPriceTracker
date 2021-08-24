@@ -90,6 +90,7 @@ async function insertData(UUID, data) {
         time: Date.now(),
         ...data
     }
+    console.log(await database.get('product_data').getOne(UUID));
     database.get('product_data').create(obj);
 }
 
