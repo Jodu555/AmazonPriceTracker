@@ -1,6 +1,6 @@
 const { Database } = require('@jodu555/mysqlapi');
 const database = Database.getDatabase();
-const validator = require('../utils/validator');
+const validator = require('../../utils/validator');
 const { v4: uuidv4 } = require('uuid');
 
 async function getAll(req, res, next) {

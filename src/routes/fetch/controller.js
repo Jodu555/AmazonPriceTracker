@@ -1,6 +1,6 @@
 const { Database } = require('@jodu555/mysqlapi');
 const database = Database.getDatabase();
-const { getAmazonData } = require('../utils/amazon');
+const { getAmazonData } = require('../../utils/amazon');
 
 async function fetchAll(req, res, next) {
     try {
