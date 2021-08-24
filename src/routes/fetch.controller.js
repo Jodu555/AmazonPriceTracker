@@ -7,7 +7,7 @@ async function fetchAll(req, res, next) {
         const products = await database.get('product').get({});
         products.forEach(async (product) => {
             const data = await getAmazonData(product.amazon_link);
-            insertData(product.UUID, data);
+            manageData(product.UUID, data);
         });
         res.json(products);
     } catch (error) {
@@ -22,7 +22,7 @@ async function fetchOne(req, res, next) {
             UUID: uuid
         });
         const data = await getAmazonData(product.amazon_link);
-        insertData(uuid, data);
+        manageData(uuid, data);
         res.json(product);
     } catch (error) {
         next(error);
@@ -44,7 +44,17 @@ function getLatestInsertedProductByDataUUID(uuid) {
     });
 }
 
-async function insertData(UUID, data) {
+async function manageData(UUID, data) {
+    const obj = prepareData(UUID, data)
+    const latest = await getLatestInsertedProductByDataUUID(UUID);
+    database.get('product_data').create(obj);
+    //TO copy without reference
+    const newest = JSON.parse(JSON.stringify(obj));
+    const changes = estimateChanges(newest, latest);
+
+}
+
+function prepareData(data) {
     data.rating = JSON.stringify(data.rating);
     data.descriptions = JSON.stringify(data.descriptions);
     data.specifications = JSON.stringify(data.specifications);
@@ -53,18 +63,22 @@ async function insertData(UUID, data) {
         time: Date.now(),
         ...data
     }
-    const latest = await getLatestInsertedProductByDataUUID(UUID);
-    database.get('product_data').create(obj);
-    //TO copy without reference
-    const newest = JSON.parse(JSON.stringify(obj));
+    return obj;
+}
+
+function estimateChanges(newest, latest) {
+    const changes = [];
     if (JSON.stringify(latest) !== JSON.stringify(newest)) {
-        const changedEntrys = [];
         Object.entries(latest).forEach(([key, value]) => {
             if (JSON.stringify(newest[key]) !== JSON.stringify(value))
-                changedEntrys.push(key);
+                changes.push({
+                    key,
+                    latest: value,
+                    newest: newest[key]
+                });
         });
-        console.log('The ' + changedEntrys.join(', ') + ' Entrys have been changed!');
     }
+    return changes;
 }
 
 module.exports = {
