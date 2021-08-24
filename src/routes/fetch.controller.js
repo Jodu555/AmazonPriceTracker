@@ -33,14 +33,13 @@ function getLatestInsertedProductByDataUUID(uuid) {
     const query = 'SELECT * FROM product_data WHERE UUID=? ORDER BY time DESC LIMIT 1'
     return new Promise(async (resolve, reject) => {
         await database.connection.query(query, [uuid], async (error, results, fields) => {
-            const data = [];
             if (error) {
                 throw error;
             }
             await results.forEach((result) => {
-                data.push(result);
+                resolve(result);
             });
-            resolve(data);
+
         });
     });
 }
@@ -56,10 +55,15 @@ async function insertData(UUID, data) {
     }
     const latest = await getLatestInsertedProductByDataUUID(UUID);
     database.get('product_data').create(obj);
-
-    if (JSON.stringify(latest) !== JSON.stringify(obj)) {
-        //Soemthing in the product data changed
-        //TODO: Estimate what changed
+    //TO copy without reference
+    const newest = JSON.parse(JSON.stringify(obj));
+    if (JSON.stringify(latest) !== JSON.stringify(newest)) {
+        const changedEntrys = [];
+        Object.entries(latest).forEach(([key, value]) => {
+            if (JSON.stringify(newest[key]) !== JSON.stringify(value))
+                changedEntrys.push(key);
+        });
+        console.log('The ' + changedEntrys.join(', ') + ' Entrys have been changed!');
     }
 }
 
