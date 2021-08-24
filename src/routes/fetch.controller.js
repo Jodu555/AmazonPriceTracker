@@ -46,12 +46,13 @@ function getLatestInsertedProductByDataUUID(uuid) {
 
 async function manageData(UUID, data) {
     const obj = prepareData(UUID, data)
-    const latest = await getLatestInsertedProductByDataUUID(UUID)[0];
+    const latest = await getLatestInsertedProductByDataUUID(UUID);
     database.get('product_data').create(obj);
     //TO copy without reference
     const newest = JSON.parse(JSON.stringify(obj));
     if (latest) {
         const changes = estimateChanges(newest, latest);
+        console.log('Change Found:', changes);
     }
 }
 
@@ -71,7 +72,7 @@ function estimateChanges(newest, latest) {
     const changes = [];
     if (JSON.stringify(latest) !== JSON.stringify(newest)) {
         Object.entries(latest).forEach(([key, value]) => {
-            if (JSON.stringify(newest[key]) !== JSON.stringify(value))
+            if (key != 'time' && JSON.stringify(newest[key]) != JSON.stringify(value))
                 changes.push({
                     key,
                     latest: value,
