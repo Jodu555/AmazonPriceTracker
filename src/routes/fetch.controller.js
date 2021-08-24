@@ -5,9 +5,9 @@ const { getAmazonData } = require('../utils/amazon');
 async function fetchAll(req, res, next) {
     try {
         const products = await database.get('product').get({});
-        products.forEach(async (product) => {
+        await products.forEach(async (product) => {
             const data = await getAmazonData(product.amazon_link);
-            manageData(product.UUID, data);
+            await manageData(product.UUID, data);
         });
         res.json(products);
     } catch (error) {
@@ -22,7 +22,7 @@ async function fetchOne(req, res, next) {
             UUID: uuid
         });
         const data = await getAmazonData(product.amazon_link);
-        manageData(uuid, data);
+        await manageData(uuid, data);
         res.json(product);
     } catch (error) {
         next(error);
@@ -46,15 +46,16 @@ function getLatestInsertedProductByDataUUID(uuid) {
 
 async function manageData(UUID, data) {
     const obj = prepareData(UUID, data)
-    const latest = await getLatestInsertedProductByDataUUID(UUID);
+    const latest = await getLatestInsertedProductByDataUUID(UUID)[0];
     database.get('product_data').create(obj);
     //TO copy without reference
     const newest = JSON.parse(JSON.stringify(obj));
-    const changes = estimateChanges(newest, latest);
-
+    if (latest) {
+        const changes = estimateChanges(newest, latest);
+    }
 }
 
-function prepareData(data) {
+function prepareData(UUID, data) {
     data.rating = JSON.stringify(data.rating);
     data.descriptions = JSON.stringify(data.descriptions);
     data.specifications = JSON.stringify(data.specifications);
