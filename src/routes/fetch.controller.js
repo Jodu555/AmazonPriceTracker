@@ -29,6 +29,22 @@ async function fetchOne(req, res, next) {
     }
 }
 
+function getLatestInsertedProductByDataUUID(uuid) {
+    const query = 'SELECT * FROM product_data WHERE UUID=? ORDER BY time DESC LIMIT 1'
+    return new Promise(async (resolve, reject) => {
+        await database.connection.query(query, [uuid], async (error, results, fields) => {
+            const data = [];
+            if (error) {
+                throw error;
+            }
+            await results.forEach((result) => {
+                data.push(result);
+            });
+            resolve(data);
+        });
+    });
+}
+
 async function insertData(UUID, data) {
     data.rating = JSON.stringify(data.rating);
     data.descriptions = JSON.stringify(data.descriptions);
@@ -38,8 +54,13 @@ async function insertData(UUID, data) {
         time: Date.now(),
         ...data
     }
-    console.log(await database.get('product_data').getOne(UUID));
+    const latest = await getLatestInsertedProductByDataUUID(UUID);
     database.get('product_data').create(obj);
+
+    if (JSON.stringify(latest) !== JSON.stringify(obj)) {
+        //Soemthing in the product data changed
+        //TODO: Estimate what changed
+    }
 }
 
 module.exports = {
