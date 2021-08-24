@@ -1,3 +1,8 @@
+const { Database } = require('@jodu555/mysqlapi');
+const database = Database.getDatabase();
+const { getAmazonData } = require('../utils/amazon');
+const { v4: uuidv4 } = require('uuid');
+
 async function fetchAll(req, res, next) {
     try {
         const products = await database.get('product').get({});
