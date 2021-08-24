@@ -36,6 +36,9 @@ function getLatestInsertedProductByDataUUID(uuid) {
             if (error) {
                 throw error;
             }
+            if (results.length == 0)
+                resolve(null);
+
             await results.forEach((result) => {
                 resolve(result);
             });
@@ -52,7 +55,7 @@ async function manageData(UUID, data) {
     const newest = JSON.parse(JSON.stringify(obj));
     if (latest) {
         const changes = estimateChanges(newest, latest);
-        console.log('Change Found:', changes);
+        console.log('Changes Found:', changes);
     }
 }
 
