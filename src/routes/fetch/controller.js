@@ -21,9 +21,13 @@ async function fetchOne(req, res, next) {
         const product = await database.get('product').getOne({
             UUID: uuid
         });
-        const data = await getAmazonData(product.amazon_link);
-        await manageData(uuid, data);
-        res.json(product);
+        if (product) {
+            const data = await getAmazonData(product.amazon_link);
+            await manageData(uuid, data);
+            res.json(product);
+        } else {
+            next(new Error('Product with that UUID not found'));
+        }
     } catch (error) {
         next(error);
     }
