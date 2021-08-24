@@ -21,7 +21,7 @@ function createTables() {
         },
         UUID: 'varchar(64)',
         time: 'varchar(64)',
-        title: 'varchar(64)',
+        title: 'TEXT',
         price: 'varchar(64)',
         rating: 'TEXT',
         descriptions: 'TEXT',
