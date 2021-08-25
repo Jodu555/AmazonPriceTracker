@@ -3,6 +3,7 @@ A Price Tracker for Amazon and much more
 
 ## Todo
 
+* [ ] Add Routes to get the data for a Product for maybe a Chart
 * [ ] Think in general of authentication
 * [ ] Think in general of authorization
 * [ ] Accounts with their provided email addresses
