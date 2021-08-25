@@ -63,7 +63,7 @@ async function manageData(UUID, data) {
         if (changes.length > 0) {
             let text = '';
             changes.forEach(change => {
-                text += '\n ' + change.key.toUpperCase() + ' Changed from: ' + change.latest + ' to: ' + change.newest;
+                text += '\n ' + change.key.toUpperCase() + ' Changed from: \n\'' + change.latest + '\' \nTo: \'' + change.newest + '\'';
             });
             sendMessage(process.env.RECIEVER, text);
         }
