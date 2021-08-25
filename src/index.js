@@ -4,7 +4,12 @@ const morgan = require('morgan');
 const helmet = require('helmet');
 const dotenv = require('dotenv').config();
 const { Database } = require('@jodu555/mysqlapi');
-const database = Database.createDatabase('localhost', 'root', '', 'amazonPriceTracker');
+const database = Database.createDatabase(
+    process.env.DB_HOST,
+    process.env.DB_USER,
+    process.env.DB_PASSWORD,
+    process.env.DB_DATABASE
+);
 database.connect();
 require('./utils/tables').createTables();
 
