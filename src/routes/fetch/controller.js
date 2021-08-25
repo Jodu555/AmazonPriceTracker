@@ -1,6 +1,7 @@
 const { Database } = require('@jodu555/mysqlapi');
 const database = Database.getDatabase();
 const { getAmazonData } = require('../../utils/amazon');
+const { sendMessage } = require('../../utils/mailer');
 
 async function fetchAll(req, res, next) {
     try {
@@ -59,7 +60,13 @@ async function manageData(UUID, data) {
     const newest = JSON.parse(JSON.stringify(obj));
     if (latest) {
         const changes = estimateChanges(newest, latest);
-        console.log('Changes Found:', changes);
+        if (changes.length > 0) {
+            let text = '';
+            changes.forEach(change => {
+                text += '\n ' + change.key.toUpperCase() + ' Changed from: ' + change.latest + ' to: ' + change.newest;
+            });
+            sendMessage(process.env.RECIEVER, text);
+        }
     }
 }
 

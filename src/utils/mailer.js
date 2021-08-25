@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer');
 
-const sendVerificationMessage = (username, reviever, token) => {
+const sendMessage = (reviever, text) => {
     const transporter = nodemailer.createTransport({
         pool: true,
         host: process.env.SMTP_HOST,
@@ -12,17 +12,15 @@ const sendVerificationMessage = (username, reviever, token) => {
         },
     });
 
-    const link = process.env.URL + '/auth/emailValidation/' + token;
-
     const message = {
         from: process.env.MAIL_FROM,
         to: reviever,
         subject: 'Amazon-Price-Tracker',
-        text: ``,
+        text,
     };
     transporter.sendMail(message);
 };
 
 module.exports = {
-    sendVerificationMessage,
+    sendMessage,
 };
