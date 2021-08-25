@@ -19,6 +19,7 @@
     "https-proxy-agent": "^5.0.0",
     "morgan": "^1.10.0",
     "node-fetch": "^2.6.1",
+    "nodemailer": "^6.6.3",
     "uuid": "^8.3.2"
   }
 }
