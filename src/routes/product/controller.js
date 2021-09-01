@@ -7,8 +7,9 @@ async function getAll(req, res, next) {
     const products = await database.get('product').get({});
     if (products.length == 0) {
         next(new Error('There are no Products!'));
+    } else {
+        res.json(products);
     }
-    res.json(products);
 }
 
 async function get(req, res, next) {
@@ -18,8 +19,9 @@ async function get(req, res, next) {
     });
     if (!product) {
         next(new Error('Product not found'));
+    } else {
+        res.json(product);
     }
-    res.json(product);
 }
 
 function create(req, res, next) {
