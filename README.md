@@ -3,6 +3,8 @@ A Price Tracker for Amazon and much more
 
 ## Todo
 
+* [ ] Think of a way to prevent sedning if delivery day changes due to day switch
+    * [ ] When the delivery switches then the current day switches or the actual delivery is delayed
 * [ ] Add Routes to get the data for a Product for maybe a Chart
 * [ ] Think in general of authentication
 * [ ] Think in general of authorization
