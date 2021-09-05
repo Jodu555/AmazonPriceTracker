@@ -22,6 +22,7 @@ function decodeDeliveryDate(deliveryDate) {
 
 function isValidChange(from, to) {
     //+ before to cast to Number
+    //TODO: Maybe concat all these ifs together
     if (+from.numday + 1 == to.numday && from.month == to.month) {
         return true
     }
