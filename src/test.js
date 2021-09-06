@@ -22,13 +22,10 @@ console.log(isValidChange(decodeDeliveryDate('Montag, 15. Sept.'), decodeDeliver
 // console.log(decodeDeliveryDate('Mittwoch, 8. Sept.'));
 
 function decodeDeliveryDate(deliveryDate) {
-    const day = deliveryDate.split(',')[0].trim();
-    const numday = deliveryDate.split('.')[0].split(',')[1].trim();
-    const month = deliveryDate.split('.')[1].trim();
     return {
-        day,
-        numday,
-        month,
+        day: deliveryDate.split(',')[0].trim(),
+        numday: deliveryDate.split('.')[0].split(',')[1].trim(),
+        month: deliveryDate.split('.')[1].trim(),
     };
 }
 
