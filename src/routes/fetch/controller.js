@@ -3,6 +3,22 @@ const database = Database.getDatabase();
 const { getAmazonData } = require('../../utils/amazon');
 const { sendMessage } = require('../../utils/mailer');
 
+const months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'June',
+    'July',
+    'Aug',
+    'Sept',
+    'Oct',
+    'Nov',
+    'Dec',
+];
+const weekdays = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samsatg', 'Sonntag'];
+
 async function fetchAll(req, res, next) {
     try {
         const products = await database.get('product').get({});
@@ -20,7 +36,7 @@ async function fetchOne(req, res, next) {
     const { uuid } = req.params;
     try {
         const product = await database.get('product').getOne({
-            UUID: uuid
+            UUID: uuid,
         });
         if (product) {
             const data = await getAmazonData(product.amazon_link);
@@ -35,25 +51,23 @@ async function fetchOne(req, res, next) {
 }
 
 function getLatestInsertedProductByDataUUID(uuid) {
-    const query = 'SELECT * FROM product_data WHERE UUID=? ORDER BY time DESC LIMIT 1'
+    const query = 'SELECT * FROM product_data WHERE UUID=? ORDER BY time DESC LIMIT 1';
     return new Promise(async (resolve, reject) => {
         await database.connection.query(query, [uuid], async (error, results, fields) => {
             if (error) {
                 throw error;
             }
-            if (results.length == 0)
-                resolve(null);
+            if (results.length == 0) resolve(null);
 
             await results.forEach((result) => {
                 resolve(result);
             });
-
         });
     });
 }
 
 async function manageData(UUID, data) {
-    const obj = prepareData(UUID, data)
+    const obj = prepareData(UUID, data);
     const latest = await getLatestInsertedProductByDataUUID(UUID);
     database.get('product_data').create(obj);
     //TO copy without reference
@@ -62,8 +76,15 @@ async function manageData(UUID, data) {
         const changes = estimateChanges(newest, latest);
         if (changes.length > 0) {
             let text = 'A Product Data changed for: ' + newest.title;
-            changes.forEach(change => {
-                text += '\n' + change.key.toUpperCase() + ' Changed \n  From: \'' + change.latest + '\' \n  To: \'' + change.newest + '\'';
+            changes.forEach((change) => {
+                text +=
+                    '\n' +
+                    change.key.toUpperCase() +
+                    " Changed \n  From: '" +
+                    change.latest +
+                    "' \n  To: '" +
+                    change.newest +
+                    "'";
             });
             sendMessage(process.env.RECIEVER, text);
         }
@@ -77,8 +98,8 @@ function prepareData(UUID, data) {
     const obj = {
         UUID,
         time: Date.now(),
-        ...data
-    }
+        ...data,
+    };
     return obj;
 }
 
@@ -90,13 +111,13 @@ function estimateChanges(newest, latest) {
                 changes.push({
                     key,
                     latest: value,
-                    newest: newest[key]
+                    newest: newest[key],
                 });
         });
     }
 
-    if (!isValidChange(newest.delivery, latest.delivery)) {
-        if (changes.some(e => e.key === 'delivery') && changes.length <= 1) {
+    if (!isValidChange(decodeDeliveryDate(newest.delivery), decodeDeliveryDate(latest.delivery))) {
+        if (changes.some((e) => e.key === 'delivery') && changes.length <= 1) {
             return [];
         }
     }
@@ -104,7 +125,33 @@ function estimateChanges(newest, latest) {
     return changes;
 }
 
+function decodeDeliveryDate(deliveryDate) {
+    return {
+        day: deliveryDate.split(',')[0].trim(),
+        numday: deliveryDate.split('.')[0].split(',')[1].trim(),
+        month: deliveryDate.split('.')[1].trim(),
+    };
+}
+
+function isValidChange(from, to) {
+    return (
+        (+from.numday + 1 == to.numday && from.month == to.month) ||
+        (from.numday >= daysInMonth(months.indexOf(from.month + 1)) &&
+            to.month == getNext(months, months.indexOf(from.month)))
+    );
+}
+
+function daysInMonth(month) {
+    return new Date(new Date(Date.now()).getFullYear(), month, 0).getDate();
+}
+
+function getNext(arr, index) {
+    while (index + 1 >= arr.length)
+        index = index - arr.length;
+    return arr[index + 1];
+}
+
 module.exports = {
     fetchAll,
-    fetchOne
-}
+    fetchOne,
+};
