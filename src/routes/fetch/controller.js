@@ -123,6 +123,10 @@ function estimateChanges(newest, latest) {
 }
 
 function decodeDeliveryDate(deliveryDate) {
+    if (deliveryDate.includes('-'))
+        return {
+            break: true,
+        }
     return {
         day: deliveryDate.split(',')[0].trim(),
         numday: deliveryDate.split('.')[0].split(',')[1].trim(),
@@ -131,6 +135,8 @@ function decodeDeliveryDate(deliveryDate) {
 }
 
 function isValidChange(from, to) {
+    if (from.break && to.break)
+        return true;
     return (
         (+from.numday + 1 == to.numday && from.month == to.month) ||
         (from.numday >= daysInMonth(months.indexOf(from.month + 1)) &&

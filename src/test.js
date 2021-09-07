@@ -1,5 +1,5 @@
 
-
+console.log(decodeDeliveryDate('10. - 13. Sept.'));
 console.log(isValidChange(decodeDeliveryDate('Montag, 6. Sept.'), decodeDeliveryDate('Dienstag, 7. Sept.')));
 console.log(isValidChange(decodeDeliveryDate('Montag, 15. Sept.'), decodeDeliveryDate('Dienstag, 17. Sept.')));
 console.log(isValidChange(decodeDeliveryDate('Montag, 30. Sept.'), decodeDeliveryDate('Dienstag, 1. Oct.')));
@@ -8,6 +8,10 @@ console.log(isValidChange(decodeDeliveryDate('Montag, 15. Sept.'), decodeDeliver
 // console.log(decodeDeliveryDate('Mittwoch, 8. Sept.'));
 
 function decodeDeliveryDate(deliveryDate) {
+    if (deliveryDate.includes('-'))
+        return {
+            break: true,
+        }
     return {
         day: deliveryDate.split(',')[0].trim(),
         numday: deliveryDate.split('.')[0].split(',')[1].trim(),
