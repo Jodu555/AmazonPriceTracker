@@ -94,6 +94,13 @@ function estimateChanges(newest, latest) {
                 });
         });
     }
+
+    if (!isValidChange(newest.delivery, latest.delivery)) {
+        if (changes.some(e => e.key === 'delivery') && changes.length <= 1) {
+            return [];
+        }
+    }
+
     return changes;
 }
 
