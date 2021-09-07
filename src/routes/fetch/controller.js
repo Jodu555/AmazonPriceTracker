@@ -107,14 +107,15 @@ function estimateChanges(newest, latest) {
     const changes = [];
     if (JSON.stringify(latest) !== JSON.stringify(newest)) {
         Object.entries(latest).forEach(([key, value]) => {
-            if ((key != 'delivery' && isValidChange(decodeDeliveryDate(newest[key]), decodeDeliveryDate(latest[key]))) &&
-                (key != 'time' && JSON.stringify(newest[key]) != JSON.stringify(value))) {
+            if (key == 'delivery' && !isValidChange(decodeDeliveryDate(newest.delivery), decodeDeliveryDate(latest.delivery))) {
+                return;
+            }
+            if (key != 'time' && JSON.stringify(newest[key]) != JSON.stringify(value))
                 changes.push({
                     key,
                     latest: value,
                     newest: newest[key],
                 });
-            }
         });
     }
 
