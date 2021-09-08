@@ -125,7 +125,9 @@ function estimateChanges(newest, latest) {
 function decodeDeliveryDate(deliveryDate) {
     if (deliveryDate.includes('-'))
         return {
-            break: true,
+            month: deliveryDate.split('-')[1].split('.')[1].trim(),
+            numday: deliveryDate.split('-')[0].split('.')[0].trim(),
+            dashed: true,
         }
     return {
         day: deliveryDate.split(',')[0].trim(),
