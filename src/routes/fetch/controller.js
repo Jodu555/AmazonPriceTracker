@@ -75,7 +75,7 @@ async function manageData(UUID, data) {
     if (latest) {
         const changes = estimateChanges(newest, latest);
         if (changes.length > 0) {
-            let text = 'A Product Data changed for: ' + newest.title;
+            let text = 'A Product Data changed for: \'' + newest.title + '\'';
             changes.forEach((change) => {
                 text +=
                     '\n' +
