@@ -24,7 +24,7 @@ async function fetchAll(req, res, next) {
         const products = await database.get('product').get({});
         await products.forEach(async (product) => {
             const data = await getAmazonData(product.amazon_link);
-            await manageData(product.UUID, data);
+            await manageData(product.UUID, data, product.amazon_link);
         });
         res.json(products);
     } catch (error) {
@@ -40,7 +40,7 @@ async function fetchOne(req, res, next) {
         });
         if (product) {
             const data = await getAmazonData(product.amazon_link);
-            await manageData(uuid, data);
+            await manageData(uuid, data, product.amazon_link);
             res.json(product);
         } else {
             next(new Error('Product with that UUID not found'));
@@ -66,7 +66,7 @@ function getLatestInsertedProductByDataUUID(uuid) {
     });
 }
 
-async function manageData(UUID, data) {
+async function manageData(UUID, data, url) {
     const obj = prepareData(UUID, data);
     const latest = await getLatestInsertedProductByDataUUID(UUID);
     database.get('product_data').create(obj);
@@ -75,7 +75,8 @@ async function manageData(UUID, data) {
     if (latest) {
         const changes = estimateChanges(newest, latest);
         if (changes.length > 0) {
-            let text = 'A Product Data changed for: \'' + newest.title + '\'';
+            let text = 'A Product Data changed for: \'' + newest.title + '\'\n';
+            text += 'Link: \'' + url + '\'\n';
             changes.forEach((change) => {
                 text +=
                     '\n' +
