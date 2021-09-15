@@ -67,6 +67,8 @@ function getLatestInsertedProductByDataUUID(uuid) {
 }
 
 async function manageData(UUID, data, url) {
+    if (data.denied)
+        return;
     const obj = prepareData(UUID, data);
     const latest = await getLatestInsertedProductByDataUUID(UUID);
     database.get('product_data').create(obj);

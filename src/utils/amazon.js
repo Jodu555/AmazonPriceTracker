@@ -9,7 +9,7 @@ async function getAmazonData(URL) {
     const text = await response.text();
     if (text.includes('To discuss automated access to Amazon data please contact')) {
         console.log('Amazon access denied!');
-        return;
+        return { denied: true };
     }
 
     const $ = cheerio.load(text);
