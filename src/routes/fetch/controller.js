@@ -126,6 +126,8 @@ function estimateChanges(newest, latest) {
 }
 
 function decodeDeliveryDate(deliveryDate) {
+    if (!deliveryDate)
+        return { break: true }
     try {
         if (deliveryDate.includes('-'))
             return {
