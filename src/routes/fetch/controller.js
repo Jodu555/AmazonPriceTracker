@@ -126,17 +126,22 @@ function estimateChanges(newest, latest) {
 }
 
 function decodeDeliveryDate(deliveryDate) {
-    if (deliveryDate.includes('-'))
+    try {
+        if (deliveryDate.includes('-'))
+            return {
+                month: deliveryDate.split('-')[1].split('.')[1].trim(),
+                numday: deliveryDate.split('-')[0].split('.')[0].trim(),
+                dashed: true,
+            }
         return {
-            month: deliveryDate.split('-')[1].split('.')[1].trim(),
-            numday: deliveryDate.split('-')[0].split('.')[0].trim(),
-            dashed: true,
-        }
-    return {
-        day: deliveryDate.split(',')[0].trim(),
-        numday: deliveryDate.split('.')[0].split(',')[1].trim(),
-        month: deliveryDate.split('.')[1].trim(),
-    };
+            day: deliveryDate.split(',')[0].trim(),
+            numday: deliveryDate.split('.')[0].split(',')[1].trim(),
+            month: deliveryDate.split('.')[1].trim(),
+        };
+    } catch (error) {
+        console.error(error);
+        console.log('Decoding Delivery Date failed: ' + deliveryDate);
+    }
 }
 
 function isValidChange(from, to) {
