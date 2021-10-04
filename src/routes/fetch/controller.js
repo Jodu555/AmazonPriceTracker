@@ -129,6 +129,8 @@ function decodeDeliveryDate(deliveryDate) {
     if (!deliveryDate)
         return { break: true }
     try {
+        if (deliveryDate.includes('Morgen'))
+            return { break: true }
         if (deliveryDate.includes('-'))
             return {
                 month: deliveryDate.split('-')[1].split('.')[1].trim(),
