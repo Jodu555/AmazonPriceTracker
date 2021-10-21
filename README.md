@@ -12,6 +12,9 @@ A Price Tracker for Amazon and much more
 * [ ] Accounts with their bind products
 * [ ] Maybe bring this to public
 
+### Idea on data minimalization
+Only save new data if something changed so dont save every hour the data! instead only save the data if something really changed
+
 ### Mathematical Estimation
 in 1 year: n(procuts) * 24*365\
 n = 100: 876k\
