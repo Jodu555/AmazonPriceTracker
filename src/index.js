@@ -13,6 +13,7 @@ const database = Database.createDatabase(
 database.connect();
 require('./utils/tables').createTables();
 
+const { router: auth } = require('./routes/auth/')
 const { router: product } = require('./routes/product/')
 const { router: fetch } = require('./routes/fetch/')
 
@@ -23,6 +24,7 @@ app.use(morgan('dev'));
 app.use(helmet());
 app.use(express.json());
 
+app.use('/auth', auth);
 app.use('/product', product);
 app.use('/fetch', fetch);
 
