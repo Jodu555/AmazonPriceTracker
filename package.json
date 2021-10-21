@@ -13,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "@jodu555/mysqlapi": "^3.1.0",
+    "bcryptjs": "^2.4.3",
     "cheerio": "^1.0.0-rc.10",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
