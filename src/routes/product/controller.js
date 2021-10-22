@@ -1,6 +1,6 @@
 const { Database } = require('@jodu555/mysqlapi');
 const database = Database.getDatabase();
-const validator = require('../../utils/validator');
+const { productCreationSchema } = require('../../database/schemas');
 const { v4 } = require('uuid');
 
 async function getAll(req, res, next) {
@@ -25,30 +25,32 @@ async function get(req, res, next) {
 }
 
 function create(req, res, next) {
-    const validation = validator.validateProduct(req.body);
-    if (validation.success) {
+    const validation = productCreationSchema.validate(req.body);
+    if (validation.error) {
+        next(new Error(validation.error.details[0].message));
+        return;
+    } else {
         const product = req.body;
         product.UUID = v4();
         product.product_data_UUID = v4();
         database.get('product').create(product);
         res.json(product);
-    } else {
-        next(new Error(validation.message));
     }
 }
 
 async function update(req, res, next) {
     const { uuid } = req.params;
     try {
-        const validation = validator.validateProduct(req.body);
-        if (validation.success) {
+        const validation = productCreationSchema.validate(req.body);
+        if (validation.error) {
+            next(new Error(validation.error.details[0].message));
+            return;
+        } else {
             if (validation.UUID) delete validation.UUID;
             const update = await database.get('product').update({
                 UUID: uuid
             }, req.body);
             res.json(update);
-        } else {
-            throw new Error(validation.message);
         }
     } catch (error) {
         next(error);
