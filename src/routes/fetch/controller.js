@@ -90,6 +90,11 @@ async function manageData(UUID, data, url) {
                     "'";
             });
             sendMessage(process.env.RECIEVER, text);
+        } else {
+            await database.get('product_data').delete({
+                UUID: latest.UUID,
+                unique: true
+            });
         }
     }
 }
