@@ -8,8 +8,9 @@ A Price Tracker for Amazon and much more
 * [ ] Add Routes to get the data for a Product for maybe a Chart
 * [x] Think in general of authentication
 * [ ] Think in general of authorization
-* [x] Accounts with their provided email addresses
-* [ ] Accounts with their bind products
+* [ ] Authentication
+    * [ ] Email Adress
+    * [ ] bind products
 * [ ] Maybe bring this to public
 
 ### Idea on data minimalization
