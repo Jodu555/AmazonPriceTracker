@@ -3,6 +3,17 @@ const database = Database.getDatabase();
 
 function createTables() {
 
+    database.createTable('accounts', {
+        options: {
+            K: ['UUID'],
+            PK: 'UUID',
+        },
+        UUID: 'varchar(64)',
+        username: 'TEXT',
+        email: 'TEXT',
+        password: 'TEXT',
+    });
+
     database.createTable('product', {
         options: {
             PK: 'UUID',

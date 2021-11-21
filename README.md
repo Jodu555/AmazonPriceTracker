@@ -10,7 +10,7 @@ A Price Tracker for Amazon and much more
 * [x] Data minimalization as described under
 * [ ] Think in general of authorization
 * [ ] Authentication
-    * [ ] Implement the new table accounts schema 
+    * [x] Implement the new table accounts schema 
     * [ ] Email Adress
     * [ ] bind products
 * [ ] Maybe bring this to public
