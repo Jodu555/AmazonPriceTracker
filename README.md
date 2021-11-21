@@ -7,6 +7,7 @@ A Price Tracker for Amazon and much more
     * [ ] When the delivery switches then the current day switches or the actual delivery is delayed
 * [ ] Add Routes to get the data for a Product for maybe a Chart
 * [x] Think in general of authentication
+* [x] Data minimalization as described under
 * [ ] Think in general of authorization
 * [ ] Authentication
     * [ ] Implement the new table accounts schema 
