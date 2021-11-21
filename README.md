@@ -9,6 +9,7 @@ A Price Tracker for Amazon and much more
 * [x] Think in general of authentication
 * [ ] Think in general of authorization
 * [ ] Authentication
+    * [ ] Implement the new table accounts schema 
     * [ ] Email Adress
     * [ ] bind products
 * [ ] Maybe bring this to public
