@@ -13,6 +13,7 @@ A Price Tracker for Amazon and much more
     * [x] Implement the new table accounts schema 
     * [ ] Email Adress
     * [ ] bind products
+* [ ] Define for a product indicators wich shold be logged
 * [ ] Maybe bring this to public
 
 ### Idea on data minimalization
