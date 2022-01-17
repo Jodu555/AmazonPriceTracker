@@ -22,7 +22,7 @@ console.log(isValidChange(decodeDeliveryDate('Montag, 30. Sept.'), decodeDeliver
 console.log(isValidChange(decodeDeliveryDate('Montag, 15. Sept.'), decodeDeliveryDate('Dienstag, 16. Oct.')));
 
 console.log(isValidChange(decodeDeliveryDate('9. - 10. Sept.'), decodeDeliveryDate('10. - 11. Sept.')));
-console.log(isValidChange(decodeDeliveryDate('9Nicht verfügbar'), decodeDeliveryDate('10. - 11. Sept.')));
+console.log(isValidChange(decodeDeliveryDate('Nicht verfügbar'), decodeDeliveryDate('10. - 11. Sept.')));
 
 // console.log(decodeDeliveryDate('Mittwoch, 8. Sept.'));
 
@@ -44,14 +44,17 @@ function decodeDeliveryDate(deliveryDate) {
             month: deliveryDate.split('.')[1].trim(),
         };
     } catch (error) {
-        console.error(error);
         console.log('Decoding Delivery Date failed: ' + deliveryDate);
+        return { break: true }
     }
 }
 
 function isValidChange(from, to) {
     if (from.break && to.break)
-        return true;
+        return { value: false, significant: false };
+    if (from.break || to.break) {
+        return { value: true, significant: true };
+    }
     return {
         value: (
             (+from.numday + 1 == to.numday && from.month == to.month) ||
