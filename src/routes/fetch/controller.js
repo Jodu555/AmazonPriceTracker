@@ -116,8 +116,11 @@ function estimateChanges(newest, latest) {
     const changes = [];
     if (JSON.stringify(latest) !== JSON.stringify(newest)) {
         Object.entries(latest).forEach(([key, value]) => {
-            if (key == 'delivery' && !isValidChange(decodeDeliveryDate(newest.delivery), decodeDeliveryDate(latest.delivery))) {
-                return;
+            if (key == 'delivery') {
+                const obj = isValidChange(decodeDeliveryDate(newest.delivery), decodeDeliveryDate(latest.delivery));
+                if (!obj.value && !obj.significant) {
+                    return;
+                }
             }
             if (key != 'time' && JSON.stringify(newest[key]) != JSON.stringify(value))
                 changes.push({
@@ -149,19 +152,24 @@ function decodeDeliveryDate(deliveryDate) {
             month: deliveryDate.split('.')[1].trim(),
         };
     } catch (error) {
-        console.error(error);
         console.log('Decoding Delivery Date failed: ' + deliveryDate);
+        return { break: true }
     }
 }
 
 function isValidChange(from, to) {
     if (from.break && to.break)
-        return true;
-    return (
-        (+from.numday + 1 == to.numday && from.month == to.month) ||
-        (from.numday >= daysInMonth(months.indexOf(from.month + 1)) &&
-            to.month == getNext(months, months.indexOf(from.month)))
-    );
+        return { value: false, significant: false };
+    if (from.break || to.break) {
+        return { value: true, significant: true };
+    }
+    return {
+        value: (
+            (+from.numday + 1 == to.numday && from.month == to.month) ||
+            (from.numday >= daysInMonth(months.indexOf(from.month + 1)) &&
+                to.month == getNext(months, months.indexOf(from.month)))
+        ), significant: false
+    };
 }
 
 function daysInMonth(month) {

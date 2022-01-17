@@ -1,4 +1,3 @@
-
 const months = [
     'Jan',
     'Feb',
