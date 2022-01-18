@@ -6,6 +6,7 @@ A Price Tracker for Amazon and much more
 * [x] Think of a way to prevent sedning if delivery day changes due to day switch
     * [x] When the delivery switches then the current day switches or the actual delivery is delayed
 * [ ] Add Routes to get the data for a Product for maybe a Chart
+* [ ] Update his to the new mysqlAPI (Schemas / latest / etc.)
 * [x] Think in general of authentication
 * [x] Data minimalization as described under
 * [ ] Think in general of authorization
