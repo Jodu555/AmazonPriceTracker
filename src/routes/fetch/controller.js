@@ -40,7 +40,7 @@ async function fetchOne(req, res, next) {
         });
         if (product) {
             const data = await getAmazonData(product.amazon_link);
-            await manageData(uuid, data, product.amazon_link);
+            await manageData(uuid, data, product);
             res.json(product);
         } else {
             next(new Error('Product with that UUID not found'));
@@ -66,7 +66,7 @@ function getLatestInsertedProductByDataUUID(uuid) {
     });
 }
 
-async function manageData(UUID, data, url) {
+async function manageData(UUID, data, { amazon_link: url, notification_cases: cases }) {
     if (data.denied)
         return;
     const obj = prepareData(UUID, data);
@@ -79,15 +79,19 @@ async function manageData(UUID, data, url) {
         if (changes.length > 0) {
             let text = 'A Product Data changed for: \'' + newest.title + '\'\n';
             text += 'Link: \'' + url + '\'\n';
-            changes.forEach((change) => {
-                text +=
-                    '\n' +
-                    change.key.toUpperCase() +
-                    " Changed \n  From: '" +
-                    change.latest +
-                    "' \n  To: '" +
-                    change.newest +
-                    "'";
+            changes.forEach(({ key, latest, newest }) => {
+                if (cases.includes('*') || JSON.parse(cases).includes(key)) {
+                    text +=
+                        '\n' +
+                        key.toUpperCase() +
+                        " Changed \n  From: '" +
+                        latest +
+                        "' \n  To: '" +
+                        newest +
+                        "'";
+                } else {
+                    console.log(`Detected change: ${key.toUpperCase()} but is not in cases: ${cases}`);
+                }
             });
             sendMessage(process.env.RECIEVER, text);
         } else {

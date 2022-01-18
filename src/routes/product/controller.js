@@ -33,6 +33,7 @@ function create(req, res, next) {
         const product = req.body;
         product.UUID = v4();
         product.product_data_UUID = v4();
+        product.notification_cases = '*';
         database.get('product').create(product);
         res.json(product);
     }
