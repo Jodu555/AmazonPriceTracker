@@ -24,7 +24,7 @@ async function fetchAll(req, res, next) {
         const products = await database.get('product').get({});
         await products.forEach(async (product) => {
             const data = await getAmazonData(product.amazon_link);
-            await manageData(product.UUID, data, product.amazon_link);
+            await manageData(product.UUID, data, product);
         });
         res.json(products);
     } catch (error) {
@@ -76,11 +76,13 @@ async function manageData(UUID, data, { amazon_link: url, notification_cases: ca
     const newest = JSON.parse(JSON.stringify(obj));
     if (latest) {
         const changes = estimateChanges(newest, latest);
+        console.log(cases);
+        console.log(changes);
         if (changes.length > 0) {
             let text = 'A Product Data changed for: \'' + newest.title + '\'\n';
             text += 'Link: \'' + url + '\'\n';
             changes.forEach(({ key, latest, newest }) => {
-                if (cases.includes('*') || JSON.parse(cases).includes(key)) {
+                if (cases?.includes('*') || JSON.parse(cases).includes(key)) {
                     text +=
                         '\n' +
                         key.toUpperCase() +
