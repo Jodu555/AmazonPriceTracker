@@ -21,6 +21,7 @@ function createTables() {
         UUID: 'varchar(64)',
         amazon_link: 'MEDIUMTEXT',
         product_data_UUID: 'varchar(64)',
+        notification_cases: 'LONGTEXT',
     });
 
     database.createTable('product_data', {
