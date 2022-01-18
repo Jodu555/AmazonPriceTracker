@@ -17,6 +17,11 @@ const { router: auth } = require('./routes/auth/')
 const { router: product } = require('./routes/product/')
 const { router: fetch } = require('./routes/fetch/')
 
+// For all cases:
+// '["title","price","rating","descriptions","specifications","availability","delivery"]'
+// For no spam ^^:
+// ["title","price","rating","descriptions","specifications"] //This doesnt show if products are availabil or not
+
 
 const app = express();
 app.use(cors());
