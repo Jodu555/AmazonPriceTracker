@@ -76,8 +76,6 @@ async function manageData(UUID, data, { amazon_link: url, notification_cases: ca
     const newest = JSON.parse(JSON.stringify(obj));
     if (latest) {
         const changes = estimateChanges(newest, latest);
-        console.log(cases);
-        console.log(changes);
         if (changes.length > 0) {
             let text = 'A Product Data changed for: \'' + newest.title + '\'\n';
             text += 'Link: \'' + url + '\'\n';
