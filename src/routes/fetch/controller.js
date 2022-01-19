@@ -79,8 +79,10 @@ async function manageData(UUID, data, { amazon_link: url, notification_cases: ca
         if (changes.length > 0) {
             let text = 'A Product Data changed for: \'' + newest.title + '\'\n';
             text += 'Link: \'' + url + '\'\n';
+            let send = false;
             changes.forEach(({ key, latest, newest }) => {
                 if (cases?.includes('*') || JSON.parse(cases).includes(key)) {
+                    send = true;
                     text +=
                         '\n' +
                         key.toUpperCase() +
@@ -93,7 +95,8 @@ async function manageData(UUID, data, { amazon_link: url, notification_cases: ca
                     console.log(`Detected change: ${key.toUpperCase()} but is not in cases: ${cases}`);
                 }
             });
-            sendMessage(process.env.RECIEVER, text);
+            if (send)
+                sendMessage(process.env.RECIEVER, text);
         } else {
             //If Nothing changed the latest entry gets deleted
             await database.get('product_data').delete({
